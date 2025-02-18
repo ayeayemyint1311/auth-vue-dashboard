@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../components/Login.vue";
 import Dashboard from "../components/Dashboard.vue";
-import { useRouter } from "vue-router";
 
 const routes = [
   {
@@ -15,7 +14,7 @@ const routes = [
   {
     path: "/dashboard",
     component: Dashboard,
-    meta: { requiresAuth: true },
+    // meta: { requiresAuth: true },
   },
 ];
 
@@ -25,10 +24,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("auth_token");
-
-  if (to.meta.requiresAuth && !token) {
-    next("/login"); // Redirect to login if the route requires auth but user isn't authenticated
+  const isAuthenticated = localStorage.getItem("token"); // Check if user is logged in
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next("/login"); // Redirect to login if not authenticated
   } else {
     next();
   }
